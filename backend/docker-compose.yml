@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: stitch_style_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-stitch_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-StitchStyleSecure2026!Db}
+      POSTGRES_DB: ${POSTGRES_DB:-stitch_style_db}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-stitch_admin} -d ${POSTGRES_DB:-stitch_style_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: stitch_style_api
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  postgres_data:

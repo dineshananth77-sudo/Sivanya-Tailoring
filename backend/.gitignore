@@ -1,0 +1,36 @@
+# Environments & Secrets
+.env
+.env.*
+!.env.example
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+
+# Database files & local data
+pgdata/
+db_data/
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+postgres.log
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
